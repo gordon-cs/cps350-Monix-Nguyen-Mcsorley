@@ -19,5 +19,10 @@
 	- Profile deactivation switch
 
 ####UI SKETCHES
+<img width="539" alt="screen shot 2018-04-04 at 12 46 04 pm" src="https://user-images.githubusercontent.com/25459178/38321722-62f97cea-3806-11e8-8d89-6992373db6c9.png">
+
+
+####USE CASE
+<img width="513" alt="screen shot 2018-04-04 at 12 47 13 pm" src="https://user-images.githubusercontent.com/25459178/38321734-6701ba96-3806-11e8-9694-3583623ed059.png">
 
 
