@@ -1,5 +1,7 @@
 package com.example.roommatefinder;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 validate(Name.getText().toString(), Password.getText().toString());
+
             }
         });
 
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         if ((userName.equals("admin")) && (userPassword.equals("1234")))
         {
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+
             startActivity(intent);
         }
 
