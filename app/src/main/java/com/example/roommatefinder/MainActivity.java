@@ -7,6 +7,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import android.content.Intent;
+import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText Password;
     private Button Login;
     private int counter = 5;
+    private HashMap users = new HashMap();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);
         Login = (Button)findViewById(R.id.btnLogin);
+
+
+
+        users.put("admin","1234");
+        users.put("max","moniz");
+
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,20 +48,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void validate(String userName, String userPassword)
     {
-        if ((userName.equals("admin")) && (userPassword.equals("1234")))
+//        if ((userName.equals("admin")) && (userPassword.equals("1234")))
+        for(int i = 0; i< this.users.size(); i++)
         {
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-            startActivity(intent);
-        }
-
-        else
-        {
-            counter --;
-
-            if (counter == 0)
+            if ( users.containsKey(userName) && users.containsValue(userPassword) ) {
+                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                intent.putExtra("username", userName);
+                intent.putExtra("password", userPassword);
+                startActivity(intent);
+            }
+            else
             {
-                Login.setEnabled(false);
+                Toast toast = Toast.makeText(getBaseContext(),"username and password combination doesn't exist",Toast.LENGTH_SHORT);
+                toast.show();
             }
         }
+
     }
 }
