@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import android.content.Intent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -20,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
     private int counter = 5;
     private HashMap users = new HashMap();
 
+    private TextView userRegistration;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);
         Login = (Button)findViewById(R.id.btnLogin);
+
+        userRegistration = (TextView) findViewById(R.id.tvRegister);
 
 
 
@@ -43,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 validate(Name.getText().toString(), Password.getText().toString());
+            }
+        });
+
+        userRegistration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RegistrationActivity.class));
             }
         });
 
