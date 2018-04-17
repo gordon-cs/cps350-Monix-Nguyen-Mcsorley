@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
         users.put("admin","1234");
         users.put("max","moniz");
+        users.put("sam", "nguyen");
+
 
 
         Login.setOnClickListener(new View.OnClickListener() {

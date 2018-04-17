@@ -33,15 +33,17 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
+
 
         Intent intent = getIntent();
 
         String userName = intent.getStringExtra("username");
         String password = intent.getStringExtra("password");
 
+
+
         final TextView textView = (TextView) findViewById(R.id.textView);
-        textView.setText("Username " + userName + " password " + password + " \n");
+        textView.setText("Username: " + userName + "\n" + "Password: " + password + " \n" + "\n");
 
 
         RequestQueue queue = Volley.newRequestQueue(this);
