@@ -65,6 +65,24 @@ public class HomeActivity extends AppCompatActivity {
         textView.setText("Username: " + userName + "\n" + "Password: " + password + " \n" + "\n");
 
 
+        /*
+            Using Volley to make a GET Request
+            How it Works:
+                Volley stores requests in RequestQueue
+                StringRequest makes and holds the request:
+                    The first two parameters are used for making the request
+                    The last two parameters are listeners waiting on the response of the server
+                    if there is a valid response then onResponse is called, else an error was thrown
+
+            Dependencies:
+            Add this line to your gradle dependencies for your Android project's app module:
+                    compile 'com.android.volley:volley:1.0.0'
+
+            Sources:
+                https://stackoverflow.com/questions/20059576/import-android-volley-to-android-studio
+                https://developer.android.com/training/volley/simple.html
+                https://afzaln.com/volley/com/android/volley/toolbox/StringRequest.html
+         */
         RequestQueue queue = Volley.newRequestQueue(this);
         String weatherURL = "https://api.darksky.net/forecast/c7a0bbc2b027787365af6e16179330a4/42.589611,-70.819806";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, weatherURL, new Response.Listener<String>()
