@@ -20,6 +20,13 @@
             android:contentDescription="Logout"
             android:text="Logout" />
 
+        <Button
+            android:id="@+id/btnProfile"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:contentDescription="go to profile page"
+            android:text="GO TO PROFILE" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="fill_parent"
