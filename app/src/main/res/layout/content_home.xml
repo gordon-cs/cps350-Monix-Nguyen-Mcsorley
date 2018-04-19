@@ -8,13 +8,29 @@
     tools:context=".HomeActivity"
     tools:showIn="@layout/activity_home">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="what"
-        tools:layout_editor_absoluteX="176dp"
-        tools:layout_editor_absoluteY="142dp" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:contentDescription="Logout"
+            android:text="Logout" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="what"
+            android:textSize="25sp"
+            tools:layout_editor_absoluteX="176dp"
+            tools:layout_editor_absoluteY="142dp" />
+
+
+    </LinearLayout>
 
 
 </ScrollView>
