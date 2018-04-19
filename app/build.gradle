@@ -29,9 +29,11 @@ dependencies {
     //compile project(path: ':volley')
     compile 'com.android.volley:volley:1.0.0'
 
+
     implementation 'com.google.firebase:firebase-core:15.0.0'
     implementation 'com.google.firebase:firebase-auth:15.0.0'
     implementation 'com.google.firebase:firebase-database:15.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
