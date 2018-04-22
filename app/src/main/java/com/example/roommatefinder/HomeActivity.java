@@ -30,7 +30,7 @@ import java.net.URL;
 public class HomeActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
-    private Button logout;
+    private Button logout, profilePage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
 
         logout = (Button) findViewById(R.id.btnLogout);
 
+        profilePage = (Button) findViewById(R.id.btnProfile);
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,13 +54,20 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        profilePage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+            }
+        });
+
 
 
         Intent intent = getIntent();
 
         String userName = intent.getStringExtra("username");
         String password = intent.getStringExtra("password");
-
 
 
         final TextView textView = (TextView) findViewById(R.id.textView);
