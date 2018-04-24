@@ -1,13 +1,11 @@
 package com.example.roommatefinder;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,11 +15,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ProfileActivity extends AppCompatActivity {
+public class UpdateProfile extends AppCompatActivity {
 
-    private ImageView profilePic;
-    private TextView profileName, profileClass, profileEmail, profileGender;
-    private Button profileUpdate, changePassword;
+    private EditText newUserName, newUserEmail, newUserClass, newUserGender;
+    private Button save;
 
     //1st step: import firebase auth and database
     private FirebaseAuth firebaseAuth;
@@ -30,14 +27,13 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_update_profile);
 
-        profileName = findViewById(R.id.tvProfileName);
-        profileEmail = findViewById(R.id.tvProfileEmail);
-        profileClass = findViewById(R.id.tvProfileClass);
-        profileGender = findViewById(R.id.tvProfileGender);
-        changePassword = findViewById(R.id.btnChangePassword);
-        profileUpdate = findViewById(R.id.btnProfileUpdate);
+        newUserName = findViewById(R.id.etNameUpdate);
+        newUserEmail = findViewById(R.id.etEmailUpdate);
+        newUserClass = findViewById(R.id.etClassUpdate);
+        newUserGender = findViewById(R.id.etGenderUpdate);
+        save = findViewById(R.id.btnSave);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -47,43 +43,44 @@ public class ProfileActivity extends AppCompatActivity {
 
         //3rd step: create reference to database, give it object name
         //parameter should be userID
-        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
+        final DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
 
-        //4th step: retrieve data with ValueEventListener - this will update everytime database change
+        //4th step: retrieve data with ValueEventListener
         //https://firebase.google.com/docs/database/admin/retrieve-data
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) { //when theres data change or when app starts
                 UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
 
-                profileName.setText(userProfile.getUserName());
-                profileEmail.setText(userProfile.getUserEmail());
-                profileClass.setText(userProfile.getUserClass());
-                profileGender.setText(userProfile.getUserGender());
+                newUserName.setText(userProfile.getUserName());
+                newUserEmail.setText(userProfile.getUserEmail());
+                newUserClass.setText(userProfile.getUserClass());
+                newUserGender.setText(userProfile.getUserGender());
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ProfileActivity.this, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateProfile.this, databaseError.getCode(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        profileUpdate.setOnClickListener(new View.OnClickListener() {
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, UpdateProfile.class));
-            }
-        });
+                String name = newUserName.getText().toString();
+                String email = newUserEmail.getText().toString();
+                String classYear = newUserClass.getText().toString();
+                String gender = newUserGender.getText().toString();
 
-        changePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, UpdatePassword.class));
+                //name -> email -> class -> gender in that order
+                UserProfile userProfile = new UserProfile(name, email, classYear, gender);
+
+                databaseReference.setValue(userProfile);
+
                 finish();
             }
         });
-
     }
 
     @Override
