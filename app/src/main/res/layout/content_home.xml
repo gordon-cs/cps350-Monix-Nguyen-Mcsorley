@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".HomeActivity"
+    tools:showIn="@layout/activity_home">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:contentDescription="Logout"
+            android:text="Logout" />
+
+        <Button
+            android:id="@+id/btnProfile"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:contentDescription="go to profile page"
+            android:text="GO TO PROFILE" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="what"
+            android:textSize="25sp"
+            tools:layout_editor_absoluteX="176dp"
+            tools:layout_editor_absoluteY="142dp" />
+
+
+    </LinearLayout>
+
+
+</ScrollView>
