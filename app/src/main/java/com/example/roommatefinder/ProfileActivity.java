@@ -14,7 +14,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 public class ProfileActivity extends AppCompatActivity {
+
+    private AdView mAdView;
 
     private ImageView profilePic;
     private TextView profileName, profileClass, profileEmail, profileGender;
@@ -28,6 +34,15 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        // Initialize an add instance with your app id - this is testing app id, using your app id
+        // for testing can lead to termination of your account
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
+
+        // Send out ad request and then load ad once received
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         profileName = findViewById(R.id.tvProfileName);
         profileEmail = findViewById(R.id.tvProfileEmail);
