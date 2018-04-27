@@ -75,14 +75,14 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void setupUIViews() {
-        userName = (EditText) findViewById(R.id.etUserName);
-        userEmail = (EditText) findViewById(R.id.etUserEmail);
-        userPassword = (EditText) findViewById(R.id.etUserPassword);
-        regButton = (Button) findViewById(R.id.btnRegister);
-        userLogin = (TextView) findViewById(R.id.tvUserLogin);
-        userGender = (EditText) findViewById(R.id.etUserGender);
-        userClass = (EditText) findViewById(R.id.etUserClass);
-        userProfilePic = (ImageView) findViewById(R.id.ivProfile);
+        userName = findViewById(R.id.etUserName);
+        userEmail = findViewById(R.id.etUserEmail);
+        userPassword = findViewById(R.id.etUserPassword);
+        regButton = findViewById(R.id.btnRegister);
+        userLogin = findViewById(R.id.tvUserLogin);
+        userGender = findViewById(R.id.etUserGender);
+        userClass = findViewById(R.id.etUserClass);
+        userProfilePic = findViewById(R.id.ivProfile);
 
     }
 
@@ -108,9 +108,15 @@ public class RegistrationActivity extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
         //connect the auth to the database in firebase by unique ID provided by firebase
-        DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
+        if(firebaseAuth.getUid()!= null) {
+            DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
 
-        UserProfile userProfile = new UserProfile(name, email, classYear, gender);
-        myRef.setValue(userProfile);
+            UserProfile userProfile = new UserProfile(name, email, classYear, gender, null);
+            myRef.setValue(userProfile);
+        }
+        else
+        {
+            Toast.makeText(this, "Password must be at least 9 chars long", Toast.LENGTH_SHORT).show();
+        }
     }
 }

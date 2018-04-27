@@ -72,9 +72,11 @@ public class UpdateProfile extends AppCompatActivity {
                 String email = newUserEmail.getText().toString();
                 String classYear = newUserClass.getText().toString();
                 String gender = newUserGender.getText().toString();
+                //need to add a way to put current picture uri into updated profile
+
 
                 //name -> email -> class -> gender in that order
-                UserProfile userProfile = new UserProfile(name, email, classYear, gender);
+                UserProfile userProfile = new UserProfile(name, email, classYear, gender, null);
 
                 databaseReference.setValue(userProfile);
 
