@@ -1,6 +1,8 @@
 package com.example.roommatefinder;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -8,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,26 +29,29 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView profilePic;
     private TextView profileName, profileClass, profileEmail, profileGender;
     private Button profileUpdate, changePassword,profilepicUpdate;
+    private File userPic;
 
     //1st step: import firebase auth and database
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
+    static UserProfile userProfile;
 
 
     //Constants
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     //variables
-    private String mCurrentPhotoPath;
     private Uri photoURI;
 
     //Firebase
@@ -82,12 +88,28 @@ public class ProfileActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) { //when theres data change or when app starts
-                UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                userProfile = dataSnapshot.getValue(UserProfile.class);
 
                 profileName.setText(userProfile.getUserName());
                 profileEmail.setText(userProfile.getUserEmail());
                 profileClass.setText(userProfile.getUserClass());
                 profileGender.setText(userProfile.getUserGender());
+
+
+                try{
+                    displayLocalPic();
+                }
+                catch (Exception e){
+                    Toast.makeText(ProfileActivity.this,"No local Photo",Toast.LENGTH_LONG).show();
+                }
+                try{
+                    downloadPicture();
+                }
+                catch (Exception e) {
+                    Toast.makeText(ProfileActivity.this, "No Photo to Load", Toast.LENGTH_LONG).show();
+                }
+
+
 
             }
 
@@ -131,37 +153,7 @@ public class ProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateProfilePic()
-    {
-        ImageView mImageView = findViewById(R.id.ivProfilePic);
-        //mImageView.setImageBitmap();
 
-
-    }
-
-    private void download()
-    {
-        File localFile = null;
-        try {
-            localFile = File.createTempFile(profileName.getText().toString(), "jpg");
-        }
-        catch(IOException e) {}
-        StorageReference ref = storageReference.child("UserProfilePics/"+ profileName.getText().toString());
-        ref.getFile(localFile)
-                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Successfully downloaded data to local file
-                        // ...
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle failed download
-                // ...
-            }
-        });
-    }
 
 
 
@@ -175,15 +167,18 @@ public class ProfileActivity extends AppCompatActivity {
             File photo = null;
 
             try{ photo = createImageFile(); }
-            catch (IOException e) {}
+            catch (IOException e) {
+                Log.e("IO Exception","DispatchTakePicture CreateImage Failed");
+            }
 
-            if(photo != null) {
+            if( photo != null ) {
                 //Get Photo location
                 photoURI = FileProvider.getUriForFile(this,
                         "com.example.roommatefinder.fileprovider",
                         photo);
                 //Store Picture
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                userProfile.setUserPhoto(photoURI);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userProfile.getUserPhoto());
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
 
@@ -196,16 +191,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             this.upload();
+            this.displayLocalPic();
         }
-    }
-
-    // Upload photo to Firebase
-    private void upload ()
-    {
-        //Creating a tag for file in firebase
-        StorageReference ref = storageReference.child("UserProfilePics/"+ profileName.getText().toString());
-        //putting file in firebase
-        ref.putFile(photoURI);
     }
 
     // Creates an image file in app's internal storage
@@ -220,7 +207,71 @@ public class ProfileActivity extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
+    // Upload photo to Firebase
+    private void upload ()
+    {
+        //Creating a tag for file in firebase
+        StorageReference ref = storageReference.child(firebaseAuth.getUid()+ "/" + "Users");
+        //putting file in firebase
+        ref.putFile(userProfile.getUserPhoto()).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // Get a URL to the uploaded content
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                userProfile.setUserPhoto(downloadUrl);
+            }
+        });
+    }
+
+        private void downloadPicture()
+        {
+            userPic = null;
+            final ImageView mImageView = findViewById(R.id.ivProfilePic);
+
+            try {
+                File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                userPic = File.createTempFile(profileName.getText().toString(), "jpg",storageDir);
+            }
+            catch(IOException e) {}
+            StorageReference ref = storageReference.child(firebaseAuth.getUid() +"/" + "Users");
+
+            final Uri temp = FileProvider.getUriForFile(this,
+                    "com.example.roommatefinder.fileprovider",
+                    userPic);
+
+            ref.getFile(userPic)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            // Successfully downloaded data to local file
+                            Bitmap bitmap = BitmapFactory.decodeFile(userPic.getAbsolutePath());
+                            mImageView.setImageBitmap(bitmap);
+                            userProfile.setUserPhoto(temp);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle failed download
+                    // ...
+
+                }
+            });
+
+        }
+
+        private void displayLocalPic()
+        {
+            ImageView mImageView = findViewById(R.id.ivProfilePic);
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), userProfile.getUserPhoto());
+                mImageView.setImageBitmap(bitmap);
+            }
+            catch (IOException e) {}
+
+        }
+
 }
