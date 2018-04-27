@@ -1,6 +1,9 @@
 package com.example.roommatefinder;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,11 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.IOException;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -25,7 +35,29 @@ public class RegistrationActivity extends AppCompatActivity {
     private TextView userLogin;
     private FirebaseAuth firebaseAuth;
     private ImageView userProfilePic;
+    private FirebaseStorage firebaseStorage;
+    private static int PICK_IMAGE = 123;
     String email, name, classYear, password, gender;
+    Uri imagePath;
+    private StorageReference storageReference;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == PICK_IMAGE && resultCode == RESULT_OK && data.getData() != null)
+        {
+            imagePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
+                userProfilePic.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +70,19 @@ public class RegistrationActivity extends AppCompatActivity {
         // https://medium.com/@peterekeneeze/build-a-simple-blog-app-with-firebase-in-android-studio-b6482275408
         // if using medium website, go to authentication tab, about middle of page
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+
+        storageReference = firebaseStorage.getReference();
+
+        userProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*"); //all image files. application/* for all types of files
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE);
+            }
+        });
 
         regButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +140,7 @@ public class RegistrationActivity extends AppCompatActivity {
         gender = userGender.getText().toString();
         classYear = userClass.getText().toString();
 
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || gender.isEmpty() || classYear.isEmpty()) {
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || gender.isEmpty() || classYear.isEmpty() || imagePath == null) {
             Toast.makeText(this, "Please fill out all the fields", Toast.LENGTH_SHORT).show();
         }
         else {
@@ -110,7 +155,27 @@ public class RegistrationActivity extends AppCompatActivity {
         //connect the auth to the database in firebase by unique ID provided by firebase
         DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
 
+        //connect to firebase storage, user the Users folder
+        //upload tasks put the imagePath on storage
+        StorageReference imageRef = storageReference.child(firebaseAuth.getUid()).child("Users");
+        UploadTask uploadTask = imageRef.putFile(imagePath);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RegistrationActivity.this, "Upload failed!", Toast.LENGTH_SHORT).show();
+
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) { //tasksnapshot puts pic on storage
+                Toast.makeText(RegistrationActivity.this, "Upload successful!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
         UserProfile userProfile = new UserProfile(name, email, classYear, gender);
         myRef.setValue(userProfile);
     }
+
+
 }
