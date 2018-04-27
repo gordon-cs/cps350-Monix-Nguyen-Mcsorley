@@ -19,6 +19,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -29,6 +33,8 @@ import java.net.URL;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private AdView mAdView;
+
     private FirebaseAuth firebaseAuth;
     private Button logout, profilePage;
 
@@ -36,6 +42,16 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Initialize an add instance with your app id - this is testing app id, using your app id
+        // for testing can lead to termination of your account
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
+
+        // Send out ad request and then load ad once received
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -72,44 +88,6 @@ public class HomeActivity extends AppCompatActivity {
 
         final TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText("Username: " + userName + "\n" + "Password: " + password + " \n" + "\n");
-
-
-        /*
-            Using Volley to make a GET Request
-            How it Works:
-                Volley stores requests in RequestQueue
-                StringRequest makes and holds the request:
-                    The first two parameters are used for making the request
-                    The last two parameters are listeners waiting on the response of the server
-                    if there is a valid response then onResponse is called, else an error was thrown
-
-            Dependencies:
-            Add this line to your gradle dependencies for your Android project's app module:
-                    compile 'com.android.volley:volley:1.0.0'
-
-            Sources:
-                https://stackoverflow.com/questions/20059576/import-android-volley-to-android-studio
-                https://developer.android.com/training/volley/simple.html
-                https://afzaln.com/volley/com/android/volley/toolbox/StringRequest.html
-         */
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String weatherURL = "https://api.darksky.net/forecast/c7a0bbc2b027787365af6e16179330a4/42.589611,-70.819806";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, weatherURL, new Response.Listener<String>()
-        {
-
-            @Override
-            public void onResponse(String response) {
-                textView.append(" Response is: " + response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                textView.setText("Did not work.");
-            }
-
-        });
-
-        queue.add(stringRequest);
     }
 
 }
