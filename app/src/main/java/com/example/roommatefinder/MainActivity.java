@@ -57,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
 
-        Name = (EditText)findViewById(R.id.etName);
-        Password = (EditText)findViewById(R.id.etPassword);
-        Login = (Button)findViewById(R.id.btnLogin);
+        Name = findViewById(R.id.etName);
+        Password = findViewById(R.id.etPassword);
+        Login = findViewById(R.id.btnLogin);
 
-        userRegistration = (TextView) findViewById(R.id.tvRegister); //registration activity
+        userRegistration = findViewById(R.id.tvRegister); //registration activity
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);

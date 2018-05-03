@@ -31,6 +31,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -214,6 +216,8 @@ public class ProfileActivity extends AppCompatActivity {
     {
         //Creating a tag for file in firebase
         StorageReference ref = storageReference.child(firebaseAuth.getUid()+ "/" + "Users");
+
+
         //putting file in firebase
         ref.putFile(userProfile.getUserPhoto()).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -270,6 +274,11 @@ public class ProfileActivity extends AppCompatActivity {
                 mImageView.setImageBitmap(bitmap);
             }
             catch (IOException e) {}
+
+        }
+
+        private void compressPic()
+        {
 
         }
 

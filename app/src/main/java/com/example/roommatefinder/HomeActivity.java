@@ -23,6 +23,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
@@ -39,6 +44,10 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private Button logout;
     private ImageButton profilePage;
+    private TextView txtName;
+
+    private FirebaseDatabase firebaseDatabase;
+    static UserProfile userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +65,33 @@ public class HomeActivity extends AppCompatActivity {
 
 
         firebaseAuth = FirebaseAuth.getInstance(); //get instance of main class
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
-        logout = (Button) findViewById(R.id.btnLogout);
 
+        logout = findViewById(R.id.btnLogout);
         profilePage = findViewById(R.id.btnProfile);
+        txtName = findViewById(R.id.txtName);
+
+
+        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
+        databaseReference.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        userProfile = dataSnapshot.getValue(UserProfile.class);
+                        txtName.setText(userProfile.getUserName());
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +109,15 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             }
         });
+
+
+
+
+    }
+
+    private void downloadProfilePic()
+    {
+        txtName = findViewById(R.id.txtName);
 
     }
 
