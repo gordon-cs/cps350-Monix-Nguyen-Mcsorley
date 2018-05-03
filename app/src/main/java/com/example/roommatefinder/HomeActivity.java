@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -36,7 +37,8 @@ public class HomeActivity extends AppCompatActivity {
     private AdView mAdView;
 
     private FirebaseAuth firebaseAuth;
-    private Button logout, profilePage;
+    private Button logout;
+    private ImageButton profilePage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +54,12 @@ public class HomeActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         firebaseAuth = FirebaseAuth.getInstance(); //get instance of main class
 
         logout = (Button) findViewById(R.id.btnLogout);
 
-        profilePage = (Button) findViewById(R.id.btnProfile);
+        profilePage = findViewById(R.id.btnProfile);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,16 +78,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-
-        Intent intent = getIntent();
-
-        String userName = intent.getStringExtra("username");
-        String password = intent.getStringExtra("password");
-
-
-        final TextView textView = (TextView) findViewById(R.id.textView);
-        textView.setText("Username: " + userName + "\n" + "Password: " + password + " \n" + "\n");
     }
 
 }
