@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">RoommateFinder</string>
     <string name="title_activity_home">HomeActivity</string>
+    <!--https://www.mkyong.com/android/android-spinner-drop-down-list-example/ -->
+    <string name="Class_Prompt">Pick Your Class</string>
+    <string-array name="Class_Items">
+        <item>Freshmen</item>
+        <item>Sophomore</item>
+        <item>Junior</item>
+        <item>Senior</item>
+    </string-array>
 </resources>
