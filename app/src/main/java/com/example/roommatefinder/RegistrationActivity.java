@@ -192,7 +192,7 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-        UserProfile userProfile = new UserProfile(name, email, classYear, gender);
+        UserProfile userProfile = new UserProfile(name, email, classYear, gender,null);
         myRef.setValue(userProfile);
 
         }
