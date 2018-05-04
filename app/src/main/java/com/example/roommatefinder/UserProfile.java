@@ -1,21 +1,27 @@
 package com.example.roommatefinder;
 
+import android.net.Uri;
+
+import java.net.URI;
+
 public class UserProfile {
-    public String userName;
-    public String userEmail;
-    public String userClass;
-    public String userGender;
+    private String userName;
+    private String userEmail;
+    private String userClass;
+    private String userGender;
+    private Uri userPhoto;
 
     //constructor, need this because of setter and getter
     public UserProfile(){
 
     }
-    public UserProfile(String userName, String userEmail, String userClass, String userGender)
+    public UserProfile(String userName, String userEmail, String userClass, String userGender,Uri uri)
     {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userClass = userClass;
         this.userGender = userGender;
+        this.userPhoto = uri;
     }
 
     //5th step: create getter and setter
@@ -49,7 +55,9 @@ public class UserProfile {
         return userGender;
     }
 
-    public void setUserGender(String userGender) {
-        this.userGender = userGender;
-    }
+    public void setUserGender(String userGender) { this.userGender = userGender; }
+
+    public void setUserPhoto(Uri userPhoto){ this.userPhoto = userPhoto; }
+
+    public Uri getUserPhoto() {return this.userPhoto;}
 }
