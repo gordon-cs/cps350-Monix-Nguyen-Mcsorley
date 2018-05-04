@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private EditText userName, userEmail, userGender, userClass, userPassword;
+    private EditText userName, userEmail, userPassword;
+    private Spinner userClass;
+    private RadioButton optMale,optFemale;
     private Button regButton;
     private TextView userLogin;
     private FirebaseAuth firebaseAuth;
@@ -54,7 +58,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             if (task.isComplete()){
                                 sendUserData();
                                 Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+                                startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
                             }
                             else {
                                 Toast.makeText(RegistrationActivity.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
@@ -69,7 +73,7 @@ public class RegistrationActivity extends AppCompatActivity {
         userLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+                startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
             }
         });
     }
@@ -80,8 +84,9 @@ public class RegistrationActivity extends AppCompatActivity {
         userPassword = findViewById(R.id.etUserPassword);
         regButton = findViewById(R.id.btnRegister);
         userLogin = findViewById(R.id.tvUserLogin);
-        userGender = findViewById(R.id.etUserGender);
-        userClass = findViewById(R.id.etUserClass);
+        optMale = findViewById(R.id.optMale);
+        optFemale = findViewById(R.id.optFemale);
+        userClass = findViewById(R.id.spinner);
         userProfilePic = findViewById(R.id.ivProfile);
 
     }
@@ -92,10 +97,23 @@ public class RegistrationActivity extends AppCompatActivity {
         name = userName.getText().toString();
         email = userEmail.getText().toString();
         password = userPassword.getText().toString();
-        gender = userGender.getText().toString();
-        classYear = userClass.getText().toString();
 
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || gender.isEmpty() || classYear.isEmpty()) {
+        if(optFemale.isChecked())
+        {
+            gender = "Female";
+        }
+        else if (optMale.isChecked())
+        {
+            gender = "Male";
+        }
+        else
+        {
+            gender = null;
+        }
+
+        classYear = (String) userClass.getSelectedItem();
+
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || gender == null || classYear == null) {
             Toast.makeText(this, "Please fill out all the fields", Toast.LENGTH_SHORT).show();
         }
         else {

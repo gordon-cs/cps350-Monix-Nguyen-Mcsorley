@@ -21,26 +21,21 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private AdView mAdView;
-
     private EditText Name;
     private EditText Password;
     private Button Login;
-    private int counter = 5;
-    private HashMap users = new HashMap();
-
     private TextView userRegistration;
-
     private FirebaseAuth firebaseAuth;
-
     private ProgressDialog progressDialog; //apparently this is deprecated, but still works
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
         if (user != null)
         {
             finish(); //destroys this activity , then start Home activity
-            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            //pass current user to next intent
+
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
         }
 
 
@@ -85,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         userRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, RegistrationActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
             }
         });
 
@@ -102,16 +99,17 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful())
                 {
                     progressDialog.dismiss();
-                    Toast.makeText(MainActivity.this, "Log in successful", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    Toast.makeText(LoginActivity.this, "Log in successful", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 }
                 else
                 {
                     progressDialog.dismiss();
-                    Toast.makeText(MainActivity.this, "Log in failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Log in failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
     }
+
+
 }

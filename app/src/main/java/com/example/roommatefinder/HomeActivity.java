@@ -2,22 +2,13 @@ package com.example.roommatefinder;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.android.gms.ads.MobileAds;
@@ -29,14 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class HomeActivity extends AppCompatActivity {
 
     private AdView mAdView;
@@ -45,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button logout;
     private ImageButton profilePage;
     private TextView txtName;
+
 
     private FirebaseDatabase firebaseDatabase;
     static UserProfile userProfile;
@@ -71,6 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         logout = findViewById(R.id.btnLogout);
         profilePage = findViewById(R.id.btnProfile);
         txtName = findViewById(R.id.txtName);
+        profilePage = findViewById(R.id.btnProfile);
 
 
         DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
@@ -78,17 +63,12 @@ public class HomeActivity extends AppCompatActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-
                         userProfile = dataSnapshot.getValue(UserProfile.class);
                         txtName.setText(userProfile.getUserName());
-
-
                     }
-
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError)
+                    {}
                 });
 
 
@@ -98,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 firebaseAuth.signOut();
                 finish();
-                startActivity(new Intent(HomeActivity.this, MainActivity.class));
+                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             }
         });
 
@@ -118,7 +98,6 @@ public class HomeActivity extends AppCompatActivity {
     private void downloadProfilePic()
     {
         txtName = findViewById(R.id.txtName);
-
     }
 
 }

@@ -1,6 +1,8 @@
 package com.example.roommatefinder;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.net.URI;
 
@@ -60,4 +62,5 @@ public class UserProfile {
     public void setUserPhoto(Uri userPhoto){ this.userPhoto = userPhoto; }
 
     public Uri getUserPhoto() {return this.userPhoto;}
+
 }

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,9 +40,9 @@ import java.net.URI;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private ImageView profilePic;
+    private ImageButton imgbtn;
     private TextView profileName, profileClass, profileEmail, profileGender;
-    private Button profileUpdate, changePassword,profilepicUpdate;
+    private Button profileUpdate, changePassword;
     private File userPic;
 
     //1st step: import firebase auth and database
@@ -70,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileGender = findViewById(R.id.tvProfileGender);
         changePassword = findViewById(R.id.btnChangePassword);
         profileUpdate = findViewById(R.id.btnProfileUpdate);
-        profilepicUpdate = findViewById(R.id.btnPicUpdate);
+        imgbtn = findViewById(R.id.imgbtn);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -120,7 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        profilepicUpdate.setOnClickListener(new View.OnClickListener() {
+        imgbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent();
@@ -232,7 +233,7 @@ public class ProfileActivity extends AppCompatActivity {
         private void downloadPicture()
         {
             userPic = null;
-            final ImageView mImageView = findViewById(R.id.ivProfilePic);
+            final ImageButton mImageView = findViewById(R.id.imgbtn);
 
             try {
                 File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -250,8 +251,27 @@ public class ProfileActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             // Successfully downloaded data to local file
-                            Bitmap bitmap = BitmapFactory.decodeFile(userPic.getAbsolutePath());
+                            int targetW = mImageView.getWidth();
+                            int targetH = mImageView.getHeight();
+
+                            // Get the dimensions of the bitmap
+                            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                            bmOptions.inJustDecodeBounds = true;
+                            BitmapFactory.decodeFile(userPic.getAbsolutePath(), bmOptions);
+                            int photoW = bmOptions.outWidth;
+                            int photoH = bmOptions.outHeight;
+
+                            // Determine how much to scale down the image
+                            int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+                            // Decode the image file into a Bitmap sized to fill the View
+                            bmOptions.inJustDecodeBounds = false;
+                            bmOptions.inSampleSize = scaleFactor;
+                            bmOptions.inPurgeable = true;
+
+                            Bitmap bitmap = BitmapFactory.decodeFile(userPic.getAbsolutePath(), bmOptions);
                             mImageView.setImageBitmap(bitmap);
+
                             userProfile.setUserPhoto(temp);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -267,18 +287,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         private void displayLocalPic()
         {
-            ImageView mImageView = findViewById(R.id.ivProfilePic);
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), userProfile.getUserPhoto());
-                mImageView.setImageBitmap(bitmap);
-            }
-            catch (IOException e) {}
 
         }
 
         private void compressPic()
         {
+
 
         }
 
