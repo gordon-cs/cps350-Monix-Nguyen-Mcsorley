@@ -1,5 +1,7 @@
 package com.example.roommatefinder;
 
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -149,7 +151,17 @@ public class ProfileActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+//    PendingIntent pendingIntent =
+//            TaskStackBuilder.create(this)
+//                    // add all of DetailsActivity's parents to the stack,
+//                    // followed by DetailsActivity itself
+//                    .addNextIntentWithParentStack(upIntent)
+//                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+//    builder.setContentIntent(pendingIntent);
+//
+//    PendingIntent pendingIntent = TaskStackBuilder.create(this).addN
 
 
 
