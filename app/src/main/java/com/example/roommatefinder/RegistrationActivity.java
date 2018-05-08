@@ -158,7 +158,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         classYear = (String) userClass.getSelectedItem();
 
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || gender == null || classYear == null) {
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || gender == null || classYear == null || imagePath == null) {
             Toast.makeText(this, "Please fill out all the fields", Toast.LENGTH_SHORT).show();
         }
         else {
@@ -192,7 +192,7 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-        UserProfile userProfile = new UserProfile(name, email, classYear, gender,null);
+        UserProfile userProfile = new UserProfile(name, email, classYear, gender);
         myRef.setValue(userProfile);
 
         }
