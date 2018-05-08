@@ -17,13 +17,13 @@ public class UserProfile {
     public UserProfile(){
 
     }
-    public UserProfile(String userName, String userEmail, String userClass, String userGender,Uri uri)
+    public UserProfile(String userName, String userEmail, String userClass, String userGender)
     {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userClass = userClass;
         this.userGender = userGender;
-        this.userPhoto = uri;
+        this.userPhoto = null;
     }
 
     //5th step: create getter and setter

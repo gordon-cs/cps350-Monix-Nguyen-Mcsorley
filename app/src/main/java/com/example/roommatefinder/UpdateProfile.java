@@ -76,7 +76,7 @@ public class UpdateProfile extends AppCompatActivity {
 
 
                 //name -> email -> class -> gender in that order
-                UserProfile userProfile = new UserProfile(name, email, classYear, gender, null);
+                UserProfile userProfile = new UserProfile(name, email, classYear, gender);
 
                 databaseReference.setValue(userProfile);
 

@@ -98,12 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
                 profileGender.setText(userProfile.getUserGender());
 
 
-                try{
-                    displayLocalPic();
-                }
-                catch (Exception e){
-                    Toast.makeText(ProfileActivity.this,"No local Photo",Toast.LENGTH_LONG).show();
-                }
+
                 try{
                     downloadPicture();
                 }
@@ -194,6 +189,9 @@ public class ProfileActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             this.upload();
             this.displayLocalPic();
+//            Bitmap photo = (Bitmap) data.getExtras().get("data");
+//            ImageButton mImageView = findViewById(R.id.imgbtn);
+//            mImageView.setImageBitmap(photo);
         }
     }
 
@@ -287,7 +285,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         private void displayLocalPic()
         {
+            ImageView mImageView = findViewById(R.id.imgbtn);
 
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), userProfile.getUserPhoto());
+                mImageView.setImageBitmap(bitmap);
+            }
+
+            catch (IOException e) {}
         }
 
         private void compressPic()
