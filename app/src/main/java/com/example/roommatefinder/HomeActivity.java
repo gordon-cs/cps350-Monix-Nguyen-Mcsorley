@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
@@ -42,7 +44,6 @@ public class HomeActivity extends AppCompatActivity {
 
     //ArrayList<String> myArrayList = new ArrayList<>();
 
-
     private FirebaseDatabase firebaseDatabase;
     static UserProfile userProfile;
 
@@ -72,7 +73,7 @@ public class HomeActivity extends AppCompatActivity {
 
         myListView = findViewById(R.id.dynamicList);
         Query query = FirebaseDatabase.getInstance().getReference();
-        FirebaseListOptions<UserProfile> options = new FirebaseListOptions.Builder<UserProfile>()
+        final FirebaseListOptions<UserProfile> options = new FirebaseListOptions.Builder<UserProfile>()
                 .setLayout(R.layout.gordon)
                 //.setLifecycleOwner(HomeActivity.this)
                 .setQuery(query, UserProfile.class)
@@ -94,6 +95,23 @@ public class HomeActivity extends AppCompatActivity {
         };
 
         myListView.setAdapter(adapter);
+//        //myListView.setClickable(true);
+
+
+
+
+
+//        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                UserProfile model = (UserProfile) parent.getItemAtPosition(position);
+//                String user = model.getUserName();
+//                Toast.makeText(getApplicationContext(), "name here PLEASE: "+ user, Toast.LENGTH_LONG).show();
+////                Intent intent = new Intent(HomeActivity.this, SpecificUserActivity.class);
+////                intent.putExtra("Some Info: ", myListView.getItemAtPosition(i).toString());
+////                startActivity(intent);
+//            }
+//        });
 
         DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
         databaseReference.addValueEventListener(

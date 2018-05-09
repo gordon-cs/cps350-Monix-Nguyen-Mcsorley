@@ -99,17 +99,12 @@ public class ProfileActivity extends AppCompatActivity {
                 profileClass.setText(userProfile.getUserClass());
                 profileGender.setText(userProfile.getUserGender());
 
-
-
                 try{
                     downloadPicture();
                 }
                 catch (Exception e) {
                     Toast.makeText(ProfileActivity.this, "No Photo to Load", Toast.LENGTH_LONG).show();
                 }
-
-
-
             }
 
             @Override
