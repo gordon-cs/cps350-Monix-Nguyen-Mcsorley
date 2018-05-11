@@ -111,7 +111,7 @@ public class HomeActivity extends AppCompatActivity {
                 String gender = model.getUserGender();
 
 
-                Toast.makeText(getApplicationContext(), "name here PLEASE: "+ classYear, Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(), "name here PLEASE: "+ classYear, Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(HomeActivity.this, SpecificUserActivity.class);
 

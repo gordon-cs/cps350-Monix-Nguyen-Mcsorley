@@ -44,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ImageButton imgbtn;
     private TextView profileName, profileClass, profileEmail, profileGender;
-    private Button profileUpdate, changePassword;
+    private Button profileUpdate, changePassword, backListing, backLogout;
     private File userPic;
 
     //1st step: import firebase auth and database
@@ -74,6 +74,8 @@ public class ProfileActivity extends AppCompatActivity {
         changePassword = findViewById(R.id.btnChangePassword);
         profileUpdate = findViewById(R.id.btnProfileUpdate);
         imgbtn = findViewById(R.id.imgbtn);
+        backListing = findViewById(R.id.btnBackListing);
+        backLogout = findViewById(R.id.btnBackLogout);
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -95,9 +97,9 @@ public class ProfileActivity extends AppCompatActivity {
                 userProfile = dataSnapshot.getValue(UserProfile.class);
 
                 profileName.setText(userProfile.getUserName());
-                profileEmail.setText(userProfile.getUserEmail());
-                profileClass.setText(userProfile.getUserClass());
-                profileGender.setText(userProfile.getUserGender());
+                profileEmail.setText("Email: " + userProfile.getUserEmail());
+                profileClass.setText("Class: " +userProfile.getUserClass());
+                profileGender.setText("Gender: " + userProfile.getUserGender());
 
                 try{
                     downloadPicture();
@@ -132,6 +134,22 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(ProfileActivity.this, UpdatePassword.class));
                 finish();
+            }
+        });
+
+        backLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                finish();
+                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+            }
+        });
+
+        backListing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProfileActivity.this, HomeActivity.class));
             }
         });
 
