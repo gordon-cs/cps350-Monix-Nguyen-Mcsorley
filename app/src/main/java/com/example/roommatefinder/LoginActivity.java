@@ -32,7 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     private AdView mAdView;
     private EditText Name;
     private EditText Password;
-    private Button Login, userRegistration;
+    private Button Login;
+    private TextView userRegistration;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog; //apparently this is deprecated, but still works
 
@@ -55,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         Password = findViewById(R.id.etPassword);
         Login = findViewById(R.id.btnLogin);
 
-        userRegistration = findViewById(R.id.btnRegister); //registration activity
+        userRegistration = findViewById(R.id.tvRegister); //registration activity
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
