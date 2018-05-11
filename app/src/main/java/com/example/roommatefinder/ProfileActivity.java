@@ -75,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileUpdate = findViewById(R.id.btnProfileUpdate);
         imgbtn = findViewById(R.id.imgbtn);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //2nd step: get instance of firebase
         firebaseAuth = FirebaseAuth.getInstance();
@@ -99,17 +99,12 @@ public class ProfileActivity extends AppCompatActivity {
                 profileClass.setText(userProfile.getUserClass());
                 profileGender.setText(userProfile.getUserGender());
 
-
-
                 try{
                     downloadPicture();
                 }
                 catch (Exception e) {
                     Toast.makeText(ProfileActivity.this, "No Photo to Load", Toast.LENGTH_LONG).show();
                 }
-
-
-
             }
 
             @Override

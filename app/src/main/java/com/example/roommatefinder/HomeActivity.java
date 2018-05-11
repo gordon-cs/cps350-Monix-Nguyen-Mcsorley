@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
@@ -42,7 +44,6 @@ public class HomeActivity extends AppCompatActivity {
 
     //ArrayList<String> myArrayList = new ArrayList<>();
 
-
     private FirebaseDatabase firebaseDatabase;
     static UserProfile userProfile;
 
@@ -72,7 +73,7 @@ public class HomeActivity extends AppCompatActivity {
 
         myListView = findViewById(R.id.displayList);
         Query query = FirebaseDatabase.getInstance().getReference();
-        FirebaseListOptions<UserProfile> options = new FirebaseListOptions.Builder<UserProfile>()
+        final FirebaseListOptions<UserProfile> options = new FirebaseListOptions.Builder<UserProfile>()
                 .setLayout(R.layout.gordon)
                 //.setLifecycleOwner(HomeActivity.this)
                 .setQuery(query, UserProfile.class)
@@ -87,13 +88,40 @@ public class HomeActivity extends AppCompatActivity {
 
                 UserProfile usrProfile = (UserProfile) model;
                 usrName.setText(" Name: " + usrProfile.getUserName().toString());
-                usrEmail.setText(" \n Email: " + usrProfile.getUserEmail().toString());
+//                usrEmail.setText(" \n Email: " + usrProfile.getUserEmail().toString());
                 usrClass.setText(" Class: " + usrProfile.getUserClass().toString());
-                usrGender.setText(" Gender: " + usrProfile.getUserGender().toString());
+//                usrGender.setText(" Gender: " + usrProfile.getUserGender().toString());
             }
         };
 
         myListView.setAdapter(adapter);
+//        //myListView.setClickable(true);
+
+
+
+
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UserProfile model = (UserProfile) parent.getItemAtPosition(position);
+                String user = model.getUserName();
+                String email = model.getUserEmail();
+                String classYear = model.getUserClass();
+                String gender = model.getUserGender();
+
+
+                Toast.makeText(getApplicationContext(), "name here PLEASE: "+ classYear, Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(HomeActivity.this, SpecificUserActivity.class);
+
+                intent.putExtra("1", user);
+                intent.putExtra("2", email);
+                intent.putExtra("3", classYear);
+                intent.putExtra("4", gender);
+                startActivity(intent);
+            }
+        });
 
         DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
         databaseReference.addValueEventListener(
