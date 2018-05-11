@@ -75,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileUpdate = findViewById(R.id.btnProfileUpdate);
         imgbtn = findViewById(R.id.imgbtn);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //2nd step: get instance of firebase
         firebaseAuth = FirebaseAuth.getInstance();

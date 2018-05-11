@@ -88,9 +88,9 @@ public class HomeActivity extends AppCompatActivity {
 
                 UserProfile usrProfile = (UserProfile) model;
                 usrName.setText(" Name: " + usrProfile.getUserName().toString());
-                usrEmail.setText(" \n Email: " + usrProfile.getUserEmail().toString());
+//                usrEmail.setText(" \n Email: " + usrProfile.getUserEmail().toString());
                 usrClass.setText(" Class: " + usrProfile.getUserClass().toString());
-                usrGender.setText(" Gender: " + usrProfile.getUserGender().toString());
+//                usrGender.setText(" Gender: " + usrProfile.getUserGender().toString());
             }
         };
 
@@ -101,17 +101,27 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-//        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                UserProfile model = (UserProfile) parent.getItemAtPosition(position);
-//                String user = model.getUserName();
-//                Toast.makeText(getApplicationContext(), "name here PLEASE: "+ user, Toast.LENGTH_LONG).show();
-////                Intent intent = new Intent(HomeActivity.this, SpecificUserActivity.class);
-////                intent.putExtra("Some Info: ", myListView.getItemAtPosition(i).toString());
-////                startActivity(intent);
-//            }
-//        });
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UserProfile model = (UserProfile) parent.getItemAtPosition(position);
+                String user = model.getUserName();
+                String email = model.getUserEmail();
+                String classYear = model.getUserClass();
+                String gender = model.getUserGender();
+
+
+                Toast.makeText(getApplicationContext(), "name here PLEASE: "+ classYear, Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(HomeActivity.this, SpecificUserActivity.class);
+
+                intent.putExtra("1", user);
+                intent.putExtra("2", email);
+                intent.putExtra("3", classYear);
+                intent.putExtra("4", gender);
+                startActivity(intent);
+            }
+        });
 
         DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
         databaseReference.addValueEventListener(
