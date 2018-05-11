@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="40dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/fab_margin"
+    android:orientation="vertical"
+    tools:context=".HomeActivity">
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ListView
+        android:id="@+id/displayList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:paddingTop="40dp"
-        tools:context=".HomeActivity"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/adView"
+        android:orientation="vertical"/>
 
-        <ListView
-            android:id="@+id/dynamicList"
-            android:layout_width="match_parent"
-            android:layout_above="@+id/adView"
-            android:layout_height="wrap_content" />
 
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
@@ -25,6 +26,7 @@
             android:layout_alignParentBottom="true"
             ads:adSize="SMART_BANNER"
             ads:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
+
 
 
     </RelativeLayout>

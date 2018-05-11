@@ -71,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
         txtName = findViewById(R.id.txtName);
         profilePage = findViewById(R.id.btnProfile);
 
-        myListView = findViewById(R.id.dynamicList);
+        myListView = findViewById(R.id.displayList);
         Query query = FirebaseDatabase.getInstance().getReference();
         final FirebaseListOptions<UserProfile> options = new FirebaseListOptions.Builder<UserProfile>()
                 .setLayout(R.layout.gordon)
