@@ -77,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
         backListing = findViewById(R.id.btnBackListing);
         backLogout = findViewById(R.id.btnBackLogout);
 
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //2nd step: get instance of firebase
         firebaseAuth = FirebaseAuth.getInstance();
@@ -101,12 +101,17 @@ public class ProfileActivity extends AppCompatActivity {
                 profileClass.setText("Class: " +userProfile.getUserClass());
                 profileGender.setText("Gender: " + userProfile.getUserGender());
 
+
+
                 try{
                     downloadPicture();
                 }
                 catch (Exception e) {
                     Toast.makeText(ProfileActivity.this, "No Photo to Load", Toast.LENGTH_LONG).show();
                 }
+
+
+
             }
 
             @Override
