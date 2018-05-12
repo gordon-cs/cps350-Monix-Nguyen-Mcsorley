@@ -95,6 +95,35 @@ public class HomeActivity extends AppCompatActivity {
 
         myListView.setAdapter(adapter);
 
+//        //myListView.setClickable(true);
+
+
+
+
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UserProfile model = (UserProfile) parent.getItemAtPosition(position);
+                String user = model.getUserName();
+                String email = model.getUserEmail();
+                String classYear = model.getUserClass();
+                String gender = model.getUserGender();
+
+
+               // Toast.makeText(getApplicationContext(), "name here PLEASE: "+ classYear, Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(HomeActivity.this, SpecificUserActivity.class);
+
+                intent.putExtra("1", user);
+                intent.putExtra("2", email);
+                intent.putExtra("3", classYear);
+                intent.putExtra("4", gender);
+                startActivity(intent);
+            }
+        });
+
+
         DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
         databaseReference.addValueEventListener(
                 new ValueEventListener() {
